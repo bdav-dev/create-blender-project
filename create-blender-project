@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# Variables
 projectname=""
 
+# Constants
 CURRENT_PATH=`pwd`
 
 ASSETS="assets"
@@ -9,6 +11,8 @@ RENDER_OUTPUT="render-output"
 RESULTS="results"
 BLEND_FILES="blend-files"
 
+
+# Ask for project name, if not specified as parameter
 if [ $# -gt 0 ]; then
     projectname="$1"
 else
@@ -16,8 +20,10 @@ else
     echo
 fi
 
+# Python script to set the render output filepath and save the .blend file (then quits)
 PYTHON_SCRIPT="import bpy; bpy.context.scene.render.filepath = \"$CURRENT_PATH/$projectname/$RENDER_OUTPUT/\"; bpy.ops.wm.save_as_mainfile(filepath=\"$CURRENT_PATH/$projectname/$BLEND_FILES/$projectname.blend\");"
 
+# Verbose output
 echo "Creating directory \"$projectname\""
 mkdir "$projectname"
 
@@ -36,6 +42,8 @@ mkdir "$projectname/$RESULTS"
 
 echo "Creating file \"$projectname/$BLEND_FILES/$projectname.blend\""
 echo
+
+# Launch blender in the background with the before declared python script
 blender -b --python-expr "$PYTHON_SCRIPT"
 
 echo
