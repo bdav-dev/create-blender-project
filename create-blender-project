@@ -1,0 +1,43 @@
+#!/bin/bash
+
+projectname=""
+
+CURRENT_PATH=`pwd`
+
+ASSETS="assets"
+RENDER_OUTPUT="render-output"
+RESULTS="results"
+BLEND_FILES="blend-files"
+
+if [ $# -gt 0 ]; then
+    projectname="$1"
+else
+    read -p "Project name: " projectname
+    echo
+fi
+
+PYTHON_SCRIPT="import bpy; bpy.context.scene.render.filepath = \"$CURRENT_PATH/$projectname/$RENDER_OUTPUT/\"; bpy.ops.wm.save_as_mainfile(filepath=\"$CURRENT_PATH/$projectname/$BLEND_FILES/$projectname.blend\");"
+
+echo "Creating directory \"$projectname\""
+mkdir "$projectname"
+
+echo "Creating directory \"$projectname/$ASSETS\""
+mkdir "$projectname/$ASSETS"
+
+echo "Creating directory \"$projectname/$BLEND_FILES\""
+mkdir "$projectname/$BLEND_FILES"
+
+echo "Creating directory \"$projectname/$RENDER_OUTPUT\""
+mkdir "$projectname/$RENDER_OUTPUT"
+
+echo "Creating directory \"$projectname/$RESULTS\""
+mkdir "$projectname/$RESULTS"
+
+
+echo "Creating file \"$projectname/$BLEND_FILES/$projectname.blend\""
+echo
+blender -b --python-expr "$PYTHON_SCRIPT"
+
+echo
+
+echo "Done. Project \"$projectname\" successfully created."
